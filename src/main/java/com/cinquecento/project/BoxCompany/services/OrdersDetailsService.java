@@ -35,9 +35,6 @@ public class OrdersDetailsService {
         return orderDetailsRepository.findById(id);
     }
 
-    /*public Optional<OrderDetails> findByOrderId(int orderId) {
-        return orderDetailsRepository.findByOrderId(orderId);
-    }*/
     @Transactional
     public void setCredentials(OrderDetails orderDetails, int box_id, int order_id) {
         Optional<Box> box = boxesService.findById(box_id);

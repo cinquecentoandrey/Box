@@ -49,18 +49,6 @@ public class CustomersService {
 
     }
 
-    /*public List<Orders> getOrdersByCustomerId(String id) {
-        Optional<Customer> customer = customersRepository.findById(id);
-
-        if(customer.isPresent()) {
-            Hibernate.initialize(customer.get().getOrders());
-            return customer.get().getOrders();
-        }
-        else {
-            return Collections.emptyList();
-        }
-    }*/
-
     @Transactional
     public void update(int id, Customer updatedCustomer) {
         customersRepository.save(updatedCustomer);
@@ -71,7 +59,7 @@ public class CustomersService {
         customersRepository.save(customer);
     }
 
-    // надо подумать стоит ли вообще реализовывать этот метод
+    // danger!
     @Transactional
     public void delete(Customer customer) {
         customersRepository.delete(customer);

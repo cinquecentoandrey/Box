@@ -44,7 +44,7 @@ public class BoxesService {
         boxesRepository.save(updatedBox);
     }
 
-    // надо подумать стоит ли вообще реализовывать этот метод
+    // danger!
     @Transactional
     public void delete(Box box) {
         boxesRepository.delete(box);
