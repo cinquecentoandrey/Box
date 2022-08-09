@@ -1,0 +1,7 @@
+1. Create/delete all entities.
+2. Receive information on the status of all products.
+3. Sort entities by some criteria.
+4. Set boxes count by id, name, etc.
+5. 'Close' orders (if there are enough boxes).
+6. Create templates JSON request/response.
+7. Save money transactions and access their history via Security.
