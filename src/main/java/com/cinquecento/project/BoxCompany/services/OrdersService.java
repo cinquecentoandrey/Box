@@ -1,6 +1,8 @@
 package com.cinquecento.project.BoxCompany.services;
 
 
+import com.cinquecento.project.BoxCompany.models.Box;
+import com.cinquecento.project.BoxCompany.models.OrderDetails;
 import com.cinquecento.project.BoxCompany.repositories.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,10 +36,26 @@ public class OrdersService {
 
     public List<Order> findByCustomer(Customer customer) {
         List<Order> orders = customer.getOrder();
+
         if (orders.isEmpty()) {
             return Collections.emptyList();
         }
+
         return ordersRepository.findByCustomer(customer);
+    }
+
+    // use get() without present cuz guarantee to find the order
+    @Transactional
+    public void orderReceipt(int id) {
+        Order order = ordersRepository.findById(id).get();
+        List<OrderDetails> orderDetails = order.getOrderDetails();
+
+        orderDetails.forEach(o -> o.getBox().setBoxInStock(o.getBox().getBoxInStock() - o.getQuantity()));
+        orderDetails.forEach(o -> o.getBox().setBoxOnOrder(o.getBox().getBoxOnOrder() - o.getQuantity()));
+
+        order.setDeliveryDate(LocalDateTime.now());
+        order.setStatus(true);
+        ordersRepository.save(order);
     }
 
     @Transactional

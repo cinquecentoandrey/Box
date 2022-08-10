@@ -65,6 +65,12 @@ public class OrdersController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/sendOrder")
+    public ResponseEntity<HttpStatus> send(@PathVariable("id") int id) {
+        ordersService.orderReceipt(id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
     @ExceptionHandler
     private ResponseEntity<OrderErrorsResponse> handlerException(OrderNotCreatedException e) {
         OrderErrorsResponse response = new OrderErrorsResponse(

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Box")
-public class Box implements Serializable {
+public class Box {
 
     @Id
     @Column(name = "box_id")

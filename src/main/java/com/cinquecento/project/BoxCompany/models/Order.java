@@ -43,6 +43,9 @@ public class Order {
     @Size(min = 0, max = 16, message = "Country name should be between 0 and 16 symbols.")
     private String shipCountry;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id" )
     @JsonIgnore
@@ -130,6 +133,14 @@ public class Order {
 
     public void setOrderDetails(List<OrderDetails> orderDetails) {
         this.orderDetails = orderDetails;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     @Override

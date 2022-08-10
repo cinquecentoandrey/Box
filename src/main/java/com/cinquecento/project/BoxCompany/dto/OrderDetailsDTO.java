@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 
 public class OrderDetailsDTO {
     @Column(name = "box_price")
-    @NotNull
     private Double boxPrice;
 
     @Column(name = "quantity")

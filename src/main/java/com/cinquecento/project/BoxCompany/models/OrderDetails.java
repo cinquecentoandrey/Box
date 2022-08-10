@@ -14,7 +14,6 @@ public class OrderDetails implements Serializable {
     private int orderDetailsId;
 
     @Column(name = "box_price")
-    @NotNull
     private Double boxPrice;
 
     @Column(name = "quantity")
@@ -24,6 +23,9 @@ public class OrderDetails implements Serializable {
     @Column(name = "discount")
     @NotNull
     private Double discount;
+
+    @Column(name = "total")
+    private Double total;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "order_id")
@@ -35,10 +37,11 @@ public class OrderDetails implements Serializable {
 
     public OrderDetails() {}
 
-    public OrderDetails(Double boxPrice, Integer quantity, Double discount) {
-        this.boxPrice = boxPrice;
+    public OrderDetails(Integer quantity, Double discount) {
+        this.boxPrice = box.getBoxPrice(); // not NPE
         this.quantity = quantity;
         this.discount = discount;
+        this.total = quantity * boxPrice * (1 - discount);
     }
 
     public int getOrderDetailsId() {
@@ -71,6 +74,14 @@ public class OrderDetails implements Serializable {
 
     public void setDiscount(Double discount) {
         this.discount = discount;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
     public Order getOrders() {

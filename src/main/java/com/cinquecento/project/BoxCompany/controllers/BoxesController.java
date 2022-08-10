@@ -1,6 +1,7 @@
 package com.cinquecento.project.BoxCompany.controllers;
 
 
+import com.cinquecento.project.BoxCompany.util.BoxNotUpdatedException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -88,8 +89,25 @@ public class BoxesController {
         return Collections.singletonList((OrderDetailsDTO) Collections.emptyList());
     }
 
+    // update box, but with no handler
+    @PostMapping("/{id}/update")
+    public ResponseEntity<HttpStatus> updateBox(@PathVariable("id") int id,
+                          @RequestBody @Valid BoxDTO boxDTO) {
+
+        boxesService.update(id, convertToBox(boxDTO));
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/updateOnOrderCount")
+    public ResponseEntity<HttpStatus> updateOnOrderStatus(@PathVariable("id") int id) {
+        boxesService.updateOnOrderStatus(id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+
+
     @ExceptionHandler
-    private ResponseEntity<BoxErrorsResponse> handlerException(BoxNotCreatedException e) {
+    private ResponseEntity<BoxErrorsResponse> handlerException(BoxNotUpdatedException e) {
         BoxErrorsResponse response = new BoxErrorsResponse(
                 e.getMessage(),
                 LocalDateTime.now()

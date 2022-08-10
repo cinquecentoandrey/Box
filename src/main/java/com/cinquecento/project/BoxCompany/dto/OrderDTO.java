@@ -34,6 +34,9 @@ public class OrderDTO {
     @Size(min = 0, max = 16, message = "Country name should be between 0 and 16 symbols.")
     private String shipCountry;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private CustomerDTO customer;
@@ -86,6 +89,14 @@ public class OrderDTO {
         this.shipCountry = shipCountry;
     }
 
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
     public CustomerDTO getCustomer() {
         return customer;
     }
@@ -93,4 +104,6 @@ public class OrderDTO {
     public void setCustomer(CustomerDTO customer) {
         this.customer = customer;
     }
+
+
 }
