@@ -1,8 +1,11 @@
 package com.cinquecento.project.BoxCompany.controllers;
 
 
+import com.cinquecento.project.BoxCompany.models.OrderDetails;
 import com.cinquecento.project.BoxCompany.services.CustomersService;
+import com.cinquecento.project.BoxCompany.services.OrdersDetailsService;
 import com.cinquecento.project.BoxCompany.services.OrdersService;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,13 +38,15 @@ public class CustomersController {
     private final ModelMapper modelMapper;
     private final CustomerValidator customerValidator;
     private final OrdersService ordersService;
+    private final OrdersDetailsService ordersDetailsService;
 
     @Autowired
-    public CustomersController(CustomersService customersService, ModelMapper modelMapper, CustomerValidator customerValidator, OrdersService ordersService) {
+    public CustomersController(CustomersService customersService, ModelMapper modelMapper, CustomerValidator customerValidator, OrdersService ordersService, OrdersDetailsService ordersDetailsService) {
         this.customersService = customersService;
         this.modelMapper = modelMapper;
         this.customerValidator = customerValidator;
         this.ordersService = ordersService;
+        this.ordersDetailsService = ordersDetailsService;
     }
 
     // get all customers
@@ -73,14 +78,23 @@ public class CustomersController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    // create order NOT WORKING!
-    @PostMapping("/{id}/create_order")
+    // need to rethink
+    /*@PostMapping("/{id}/createOrder")
     public ResponseEntity<HttpStatus> createOrder(@PathVariable("id") int id,
-                                             @RequestBody @Valid OrderDTO ordersDTO,
+                                             @RequestBody ObjectNode objectNode,
                                              BindingResult bindingResult) {
-        Order order = convertToOrders(ordersDTO);
+
+        Order order = new Order(objectNode.get("shipAddress").asText(),
+                                objectNode.get("shipCity").asText(),
+                                objectNode.get("shipPostalCode").asText(),
+                                objectNode.get("shipCountry").asText());
+        OrderDetails orderDetails = new OrderDetails(objectNode.get("quantity").asInt(),
+                                                     objectNode.get("discount").asDouble());
+
         Optional<Customer> customer = customersService.findById(id);
+
         if (customer.isPresent()) {
+            order.getOrderDetails().add(orderDetails);
             List<Order> orders = customer.get().getOrder();
             orders.add(order);
             order.setCustomer(customer.get());
@@ -88,7 +102,7 @@ public class CustomersController {
             return ResponseEntity.ok(HttpStatus.OK);
         }
         throw new CustomerNotFoundException("Not found.");
-    }
+    }*/
 
     // get orders by id
     @GetMapping("/{id}")
@@ -96,6 +110,10 @@ public class CustomersController {
         Optional<Customer> customer = customersService.findById(id);
         if (customer.isPresent()) {
             List<Order> orders = customer.get().getOrder();
+            List<OrderDetails> orderDetails = orders.get(1).getOrderDetails();
+            for(OrderDetails od : orderDetails) {
+                System.out.println(od);
+            }
             if(!orders.isEmpty()) {
                 return customersService.findOrdersByCustomerId(id).stream().map(this::convertToOrderDTO).collect(Collectors.toList());
             }

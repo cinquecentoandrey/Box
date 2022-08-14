@@ -107,8 +107,8 @@ public class OrderDetails implements Serializable {
                 ", boxPrice=" + boxPrice +
                 ", quantity=" + quantity +
                 ", discount=" + discount +
-                ", order=" + order.getOrderId() +
-                ", box=" + box.getBoxId() +
+                /*", order=" + order.getOrderId() +
+                ", box=" + box.getBoxId()*/ +
                 '}';
     }
 }

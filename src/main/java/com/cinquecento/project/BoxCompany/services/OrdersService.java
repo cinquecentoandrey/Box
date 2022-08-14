@@ -1,7 +1,6 @@
 package com.cinquecento.project.BoxCompany.services;
 
 
-import com.cinquecento.project.BoxCompany.models.Box;
 import com.cinquecento.project.BoxCompany.models.OrderDetails;
 import com.cinquecento.project.BoxCompany.repositories.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class OrdersService {
         return ordersRepository.findByCustomer(customer);
     }
 
-    // use get() without present cuz guarantee to find the order
+    // use get() without present because guarantee to find the order
     @Transactional
     public void orderReceipt(int id) {
         Order order = ordersRepository.findById(id).get();

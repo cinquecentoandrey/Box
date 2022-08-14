@@ -16,6 +16,7 @@ import com.cinquecento.project.BoxCompany.services.OrdersDetailsService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,9 +39,9 @@ public class OrderDetailsController {
         return ordersDetailsService.findAll().stream().map(this::convertToOrderDetailsDTO).collect(Collectors.toList());
     }
 
-    // add one order details
-    @PostMapping("/add")
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid OrderDetailsDTO orderDetailsDTO,
+    // add order details
+    @PostMapping("/create")
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid List<OrderDetailsDTO> orderDetailsDTO,
                                              BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
@@ -56,7 +57,7 @@ public class OrderDetailsController {
             throw new OrderDetailsNotCreatedException(errorMsg.toString());
         }
 
-        ordersDetailsService.add(convertToOrderDetails(orderDetailsDTO));
+        ordersDetailsService.add(orderDetailsDTO.stream().map(this::convertToOrderDetails).collect(Collectors.toList()));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

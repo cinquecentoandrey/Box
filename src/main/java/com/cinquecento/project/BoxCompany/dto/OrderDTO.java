@@ -1,11 +1,15 @@
 package com.cinquecento.project.BoxCompany.dto;
 
+import com.cinquecento.project.BoxCompany.models.OrderDetails;
+
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class OrderDTO {
     @Column(name = "order_date")
@@ -104,6 +108,5 @@ public class OrderDTO {
     public void setCustomer(CustomerDTO customer) {
         this.customer = customer;
     }
-
 
 }

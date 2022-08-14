@@ -51,8 +51,8 @@ public class OrdersDetailsService {
 
 
     @Transactional
-    public void add(OrderDetails orderDetails) {
-        orderDetailsRepository.save(orderDetails);
+    public void add(List<OrderDetails> orderDetails) {
+        orderDetailsRepository.saveAll(orderDetails);
     }
 
 }

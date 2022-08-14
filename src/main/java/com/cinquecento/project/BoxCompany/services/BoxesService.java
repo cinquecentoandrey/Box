@@ -56,38 +56,6 @@ public class BoxesService {
             boxesRepository.save(box.get());
         }
     }
-    @Deprecated
-    @Transactional
-    public void updatePrice(int id, Box box, double newPrice) {
-        Optional<Box> updatedBox = boxesRepository.findByBoxName(box.getBoxName());
-        if (updatedBox.isPresent()) {
-            updatedBox.get().setBoxPrice(newPrice);
-            boxesRepository.save(updatedBox.get());
-        }
-    }
-
-    @Deprecated
-    @Transactional
-    public void updateOnOrderCount(Box box, int count) {
-        Optional<Box> updatedBox = boxesRepository.findByBoxName(box.getBoxName());
-        if (updatedBox.isPresent()) {
-            updatedBox.get().setBoxOnOrder(count);
-            boxesRepository.save(updatedBox.get());
-        }
-    }
-
-    @Deprecated
-    @Transactional
-    public void updateInStockCountAfterShipping(Box box, int count) {
-        Optional<Box> updatedBox = boxesRepository.findByBoxName(box.getBoxName());
-        if(updatedBox.isPresent()) {
-            if(updatedBox.get().getBoxInStock() > count) {
-                updatedBox.get().setBoxInStock(updatedBox.get().getBoxInStock()-count);
-                updatedBox.get().setBoxOnOrder(0);
-                boxesRepository.save(updatedBox.get());
-            }
-        }
-    }
 
     // danger!
     @Transactional
