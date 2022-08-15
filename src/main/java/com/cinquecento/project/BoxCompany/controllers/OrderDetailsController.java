@@ -1,6 +1,7 @@
 package com.cinquecento.project.BoxCompany.controllers;
 
 
+import com.cinquecento.project.BoxCompany.util.ErrorMessage;
 import com.cinquecento.project.BoxCompany.util.OrderDetailsErrorsResponse;
 import com.cinquecento.project.BoxCompany.util.OrderDetailsNotCreatedException;
 import org.modelmapper.ModelMapper;
@@ -16,13 +17,12 @@ import com.cinquecento.project.BoxCompany.services.OrdersDetailsService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/order_details")
+@RequestMapping("/orderDetails")
 public class OrderDetailsController {
     private final OrdersDetailsService ordersDetailsService;
     private final ModelMapper modelMapper;
@@ -45,16 +45,7 @@ public class OrderDetailsController {
                                              BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
-            StringBuilder errorMsg = new StringBuilder();
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for(FieldError e : errors){
-                errorMsg.append(e
-                                .getField())
-                        .append(" - ")
-                        .append(e.getDefaultMessage())
-                        .append(";");
-            }
-            throw new OrderDetailsNotCreatedException(errorMsg.toString());
+            throw new OrderDetailsNotCreatedException(ErrorMessage.errorMessage(bindingResult));
         }
 
         ordersDetailsService.add(orderDetailsDTO.stream().map(this::convertToOrderDetails).collect(Collectors.toList()));

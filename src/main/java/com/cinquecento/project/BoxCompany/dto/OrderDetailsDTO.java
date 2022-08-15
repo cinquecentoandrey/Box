@@ -9,10 +9,10 @@ public class OrderDetailsDTO {
 
     private Double boxPrice;
 
-    @NotNull
+    @NotNull(message = "Quantity should not be null.")
     private Integer quantity;
 
-    @NotNull
+    @NotNull(message = "Discount should not be null.")
     private Double discount;
 
     private OrderDTO order;

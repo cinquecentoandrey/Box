@@ -1,6 +1,6 @@
 package com.cinquecento.project.BoxCompany.dto;
 
-import javax.persistence.Column;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -11,11 +11,9 @@ public class CustomerDTO {
     @Size(min = 0, max = 40, message = "Name should be between 0 and 40 symbols.")
     private String companyName;
 
-
     @NotEmpty(message = "Field should not be empty.")
     @Size(min = 0, max = 40, message = "Name should be between 1 and 40 symbols.")
     private String contactName;
-
 
     @NotEmpty(message = "Field should not be empty.")
     @Size(min = 0, max = 30, message = "Title should be between 1 and 30 symbols.")

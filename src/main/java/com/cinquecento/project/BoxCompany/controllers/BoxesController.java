@@ -1,23 +1,18 @@
 package com.cinquecento.project.BoxCompany.controllers;
 
 
-import com.cinquecento.project.BoxCompany.util.BoxNotUpdatedException;
+import com.cinquecento.project.BoxCompany.util.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import com.cinquecento.project.BoxCompany.dto.BoxDTO;
 import com.cinquecento.project.BoxCompany.dto.OrderDetailsDTO;
 import com.cinquecento.project.BoxCompany.models.Box;
 import com.cinquecento.project.BoxCompany.models.OrderDetails;
 import com.cinquecento.project.BoxCompany.services.BoxesService;
-import com.cinquecento.project.BoxCompany.services.OrdersDetailsService;
-import com.cinquecento.project.BoxCompany.util.BoxErrorsResponse;
-import com.cinquecento.project.BoxCompany.util.BoxNotCreatedException;
-import com.cinquecento.project.BoxCompany.util.BoxValidator;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -54,17 +49,7 @@ public class BoxesController {
 
         boxValidator.validate(convertToBox(boxDTO), bindingResult);
         if(bindingResult.hasErrors()) {
-            StringBuilder errorMsg = new StringBuilder();
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for(FieldError e : errors){
-                errorMsg.append(e
-                                .getField())
-                        .append(" - ")
-                        .append(e.getDefaultMessage())
-                        .append(";");
-            }
-
-            throw new BoxNotCreatedException(errorMsg.toString());
+            throw new BoxNotCreatedException(ErrorMessage.errorMessage(bindingResult));
         }
 
         boxesService.add(convertToBox(boxDTO));
@@ -88,8 +73,11 @@ public class BoxesController {
     // update box, but with not handler
     @PostMapping("/{id}/update")
     public ResponseEntity<HttpStatus> updateBox(@PathVariable("id") int id,
-                          @RequestBody @Valid BoxDTO boxDTO) {
-
+                          @RequestBody @Valid BoxDTO boxDTO, BindingResult bindingResult) {
+        boxValidator.validate(convertToBox(boxDTO), bindingResult);
+        if (bindingResult.hasErrors()) {
+            throw new BoxNotUpdatedException(ErrorMessage.errorMessage(bindingResult));
+        }
         boxesService.update(id, convertToBox(boxDTO));
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -108,6 +96,7 @@ public class BoxesController {
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
 
     private OrderDetailsDTO convertToOrderDetailsDTO(OrderDetails orderDetails) {
         return modelMapper.map(orderDetails, OrderDetailsDTO.class);

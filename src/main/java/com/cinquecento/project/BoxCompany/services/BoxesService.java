@@ -39,7 +39,6 @@ public class BoxesService {
         boxesRepository.save(box);
     }
 
-    // replacing @Deprecated update methods
     @Transactional
     public void update(int id, Box updatedBox){
         updatedBox.setBoxId(id);

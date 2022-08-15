@@ -4,19 +4,19 @@ package com.cinquecento.project.BoxCompany.dto;
 import javax.validation.constraints.NotNull;
 
 public class BoxDTO {
-    @NotNull
+    @NotNull(message = "Box name should not be null.")
     private String boxName;
 
-    @NotNull
+    @NotNull(message = "Box length should not be null.")
     private Integer boxLength;
 
-    @NotNull
+    @NotNull(message = "Box width should not be null.")
     private Integer boxWidth;
 
-    @NotNull
+    @NotNull(message = "Box height should not be null.")
     private Integer boxHeight;
 
-    @NotNull
+    @NotNull(message = "Box price should not be null.")
     private Double boxPrice;
 
     private Integer boxInStock;

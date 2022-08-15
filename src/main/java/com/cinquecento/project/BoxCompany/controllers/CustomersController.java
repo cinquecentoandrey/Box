@@ -4,6 +4,7 @@ package com.cinquecento.project.BoxCompany.controllers;
 import com.cinquecento.project.BoxCompany.models.OrderDetails;
 import com.cinquecento.project.BoxCompany.services.CustomersService;
 import com.cinquecento.project.BoxCompany.services.OrdersService;
+import com.cinquecento.project.BoxCompany.util.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,6 @@ import com.cinquecento.project.BoxCompany.dto.CustomerDTO;
 import com.cinquecento.project.BoxCompany.dto.OrderDTO;
 import com.cinquecento.project.BoxCompany.models.Customer;
 import com.cinquecento.project.BoxCompany.models.Order;
-import com.cinquecento.project.BoxCompany.util.CustomerErrorsResponse;
-import com.cinquecento.project.BoxCompany.util.CustomerNotCreatedException;
-import com.cinquecento.project.BoxCompany.util.CustomerNotFoundException;
-import com.cinquecento.project.BoxCompany.util.CustomerValidator;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -57,17 +54,7 @@ public class CustomersController {
                                              BindingResult bindingResult) {
         customerValidator.validate(convertToCustomer(customerDTO), bindingResult);
         if(bindingResult.hasErrors()) {
-            StringBuilder errorMsg = new StringBuilder();
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for(FieldError e : errors){
-                errorMsg.append(e
-                                .getField())
-                        .append(" - ")
-                        .append(e.getDefaultMessage())
-                        .append(";");
-            }
-
-            throw new CustomerNotCreatedException(errorMsg.toString());
+            throw new CustomerNotCreatedException(ErrorMessage.errorMessage(bindingResult));
         }
 
         customersService.add(convertToCustomer(customerDTO));

@@ -8,6 +8,7 @@ import com.cinquecento.project.BoxCompany.models.Box;
 import com.cinquecento.project.BoxCompany.models.OrderDetails;
 import com.cinquecento.project.BoxCompany.services.BoxesService;
 import com.cinquecento.project.BoxCompany.services.OrdersDetailsService;
+import com.cinquecento.project.BoxCompany.util.ErrorMessage;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,16 +34,13 @@ import java.util.stream.Collectors;
 public class OrdersController {
     private final OrdersService ordersService;
     private final ModelMapper modelMapper;
-
-    private final CustomersService customersService;
     private final BoxesService boxesService;
     private final OrdersDetailsService ordersDetailsService;
 
     @Autowired
-    public OrdersController(OrdersService ordersService, ModelMapper modelMapper, CustomersService customersService, BoxesService boxesService, OrdersDetailsService ordersDetailsService) {
+    public OrdersController(OrdersService ordersService, ModelMapper modelMapper, BoxesService boxesService, OrdersDetailsService ordersDetailsService) {
         this.ordersService = ordersService;
         this.modelMapper = modelMapper;
-        this.customersService = customersService;
         this.boxesService = boxesService;
         this.ordersDetailsService = ordersDetailsService;
     }
@@ -60,16 +58,7 @@ public class OrdersController {
                                              BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
-            StringBuilder errorMsg = new StringBuilder();
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for(FieldError e : errors){
-                errorMsg.append(e
-                                .getField())
-                        .append(" - ")
-                        .append(e.getDefaultMessage())
-                        .append(";");
-            }
-            throw new OrderNotCreatedException(errorMsg.toString());
+            throw new OrderNotCreatedException(ErrorMessage.errorMessage(bindingResult));
         }
 
 
@@ -123,6 +112,7 @@ public class OrdersController {
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
 
     private BoxDTO convertToBoxDTO(Box box) {
         return modelMapper.map(box, BoxDTO.class);
