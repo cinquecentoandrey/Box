@@ -41,7 +41,7 @@ public class OrdersDetailsService {
         Optional<Order> order = ordersService.findById(order_id);
         if (box.isPresent() && order.isPresent()) {
             orderDetails.setBox(box.get());
-            orderDetails.setOrders(order.get());
+            orderDetails.setOrder(order.get());
             orderDetails.setBoxPrice(box.get().getBoxPrice());
             box.get().getOrderDetails().add(orderDetails);
             order.get().getOrderDetails().add(orderDetails);

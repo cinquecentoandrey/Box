@@ -1,48 +1,37 @@
 package com.cinquecento.project.BoxCompany.dto;
 
-import com.cinquecento.project.BoxCompany.models.OrderDetails;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 public class OrderDTO {
-    @Column(name = "order_date")
     private LocalDateTime orderDate;
 
-    @Column(name = "delivery_date")
     private LocalDateTime deliveryDate;
 
-    @Column(name = "ship_address")
     @NotEmpty(message = "Field should not be empty.")
     @Size(min = 0, max = 60, message = "Ship address should be between 0 and 60 symbols.")
     private String shipAddress;
 
-    @Column(name = "ship_city")
     @NotEmpty(message = "Field should not be empty.")
     @Size(min = 0, max = 30, message = "Ship city should be between 0 and 30 symbols.")
     private String shipCity;
 
-    @Column(name = "ship_postal_code")
     @NotEmpty(message = "Field should not be empty.")
     @Size(min = 0, max = 30, message = "Ship postal code should be between 0 and 30 symbols.")
     private String shipPostalCode;
 
-    @Column(name = "ship_country")
     @NotEmpty(message = "Field should not be empty.")
     @Size(min = 0, max = 16, message = "Country name should be between 0 and 16 symbols.")
     private String shipCountry;
 
-    @Column(name = "status")
     private Boolean status;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private CustomerDTO customer;
 
     public LocalDateTime getOrderDate() {

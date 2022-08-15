@@ -45,7 +45,7 @@ public class Customer {
     @Column(name = "postal_code")
     @NotEmpty(message = "Field should not be empty.")
     @Size(min = 0, max = 30, message = "Postal code should be between 0 and 10 symbols.")
-    private String postal_code;
+    private String postalCode;
 
     @Column(name = "email")
     @NotEmpty(message = "Field should not be empty.")
@@ -67,19 +67,27 @@ public class Customer {
 
     public Customer() {}
 
-    public Customer(String companyName, String contactName, String contactTitle, String address, String city, String postal_code, String email, String country, String phone) {
+    public Customer(String companyName, String contactName, String contactTitle, String address, String city, String postalCode, String email, String country, String phone) {
         this.companyName = companyName;
         this.contactName = contactName;
         this.contactTitle = contactTitle;
         this.address = address;
         this.city = city;
-        this.postal_code = postal_code;
+        this.postalCode = postalCode;
         this.email = email;
         this.country = country;
         this.phone = phone;
     }
 
     public Customer(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
 
@@ -123,12 +131,12 @@ public class Customer {
         this.city = city;
     }
 
-    public String getPostal_code() {
-        return postal_code;
+    public String getPostalCode() {
+        return postalCode;
     }
 
-    public void setPostal_code(String postal_code) {
-        this.postal_code = postal_code;
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     public String getEmail() {
@@ -172,7 +180,7 @@ public class Customer {
                 ", contactTitle='" + contactTitle + '\'' +
                 ", address='" + address + '\'' +
                 ", city='" + city + '\'' +
-                ", postal_code='" + postal_code + '\'' +
+                ", postalCode='" + postalCode + '\'' +
                 ", email='" + email + '\'' +
                 ", country='" + country + '\'' +
                 ", phone='" + phone + '\'' +

@@ -1,29 +1,30 @@
 package com.cinquecento.project.BoxCompany.dto;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
 import javax.validation.constraints.NotNull;
 
 public class OrderDetailsDTO {
-    @Column(name = "box_price")
+
+    private Integer boxId;
+
     private Double boxPrice;
 
-    @Column(name = "quantity")
     @NotNull
     private Integer quantity;
 
-    @Column(name = "discount")
     @NotNull
     private Double discount;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
     private OrderDTO order;
-
-    @ManyToOne
-    @JoinColumn(name = "box_id", referencedColumnName = "box_id")
     private BoxDTO box;
+
+    public Integer getBoxId() {
+        return boxId;
+    }
+
+    public void setBoxId(Integer boxId) {
+        this.boxId = boxId;
+    }
 
     public Double getBoxPrice() {
         return boxPrice;
@@ -49,11 +50,11 @@ public class OrderDetailsDTO {
         this.discount = discount;
     }
 
-    public OrderDTO getOrders() {
+    public OrderDTO getOrder() {
         return order;
     }
 
-    public void setOrders(OrderDTO order) {
+    public void setOrder(OrderDTO order) {
         this.order = order;
     }
 

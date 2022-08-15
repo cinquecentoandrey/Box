@@ -2,11 +2,11 @@ package com.cinquecento.project.BoxCompany.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+
 
 @Entity
 @Table(name = "Order_details")
-public class OrderDetails implements Serializable {
+public class OrderDetails {
 
     @Id
     @Column(name = "order_details_id")
@@ -38,10 +38,8 @@ public class OrderDetails implements Serializable {
     public OrderDetails() {}
 
     public OrderDetails(Integer quantity, Double discount) {
-        this.boxPrice = box.getBoxPrice(); // not NPE
         this.quantity = quantity;
         this.discount = discount;
-        this.total = quantity * boxPrice * (1 - discount);
     }
 
     public int getOrderDetailsId() {
@@ -84,11 +82,11 @@ public class OrderDetails implements Serializable {
         this.total = total;
     }
 
-    public Order getOrders() {
+    public Order getOrder() {
         return order;
     }
 
-    public void setOrders(Order order) {
+    public void setOrder(Order order) {
         this.order = order;
     }
 
@@ -97,6 +95,7 @@ public class OrderDetails implements Serializable {
     }
 
     public void setBox(Box box) {
+        this.boxPrice = box.getBoxPrice();
         this.box = box;
     }
 

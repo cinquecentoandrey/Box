@@ -51,6 +51,7 @@ public class CustomersService {
 
     @Transactional
     public void update(int id, Customer updatedCustomer) {
+        updatedCustomer.setCustomerId(id);
         customersRepository.save(updatedCustomer);
     }
 

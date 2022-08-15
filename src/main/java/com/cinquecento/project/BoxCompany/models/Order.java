@@ -47,8 +47,7 @@ public class Order {
     private Boolean status;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id" )
-    @JsonIgnore
+    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private Customer customer;
 
     @OneToMany(mappedBy = "order")
