@@ -1,2 +1,2 @@
 # Box
-This is a training project based on the Spring framework.
+REST API based on Spring
