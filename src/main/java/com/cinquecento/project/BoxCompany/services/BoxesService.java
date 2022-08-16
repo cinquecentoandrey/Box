@@ -47,13 +47,20 @@ public class BoxesService {
 
     // in the future it will be possible to immediately call get() one at a time
     @Transactional
-    public void updateOnOrderStatus(int id) {
+    public void updateOnOrderStatusById(int id) {
         Optional<Box> box = boxesRepository.findById(id);
         if(box.isPresent()) {
             box.get().setBoxId(id);
             box.get().setBoxOnOrder(box.get().getOrderDetails().stream().mapToInt(OrderDetails::getQuantity).sum());
             boxesRepository.save(box.get());
         }
+    }
+
+    @Transactional
+    public void updateOnOrderStatus() {
+        boxesRepository.findAll().forEach(box -> {
+            updateOnOrderStatusById(box.getBoxId());
+        });
     }
 
     // danger!

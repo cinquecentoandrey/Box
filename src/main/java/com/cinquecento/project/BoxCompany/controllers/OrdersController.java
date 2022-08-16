@@ -1,7 +1,7 @@
 package com.cinquecento.project.BoxCompany.controllers;
 
 
-import ch.qos.logback.core.encoder.EchoEncoder;
+
 import com.cinquecento.project.BoxCompany.dto.BoxDTO;
 import com.cinquecento.project.BoxCompany.dto.OrderDetailsDTO;
 import com.cinquecento.project.BoxCompany.models.Box;
@@ -9,16 +9,15 @@ import com.cinquecento.project.BoxCompany.models.OrderDetails;
 import com.cinquecento.project.BoxCompany.services.BoxesService;
 import com.cinquecento.project.BoxCompany.services.OrdersDetailsService;
 import com.cinquecento.project.BoxCompany.util.ErrorMessage;
+import com.cinquecento.project.BoxCompany.util.OrderNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import com.cinquecento.project.BoxCompany.dto.OrderDTO;
 import com.cinquecento.project.BoxCompany.models.Order;
-import com.cinquecento.project.BoxCompany.services.CustomersService;
 import com.cinquecento.project.BoxCompany.services.OrdersService;
 import com.cinquecento.project.BoxCompany.util.OrderErrorsResponse;
 import com.cinquecento.project.BoxCompany.util.OrderNotCreatedException;
@@ -38,29 +37,31 @@ public class OrdersController {
     private final OrdersDetailsService ordersDetailsService;
 
     @Autowired
-    public OrdersController(OrdersService ordersService, ModelMapper modelMapper, BoxesService boxesService, OrdersDetailsService ordersDetailsService) {
+    public OrdersController(OrdersService ordersService,
+                            ModelMapper modelMapper,
+                            BoxesService boxesService,
+                            OrdersDetailsService ordersDetailsService) {
         this.ordersService = ordersService;
         this.modelMapper = modelMapper;
         this.boxesService = boxesService;
         this.ordersDetailsService = ordersDetailsService;
     }
 
-    // create orders
     @GetMapping()
     public List<OrderDTO> getOrders() {
-        return ordersService.findAll().stream().map(this::convertToOrderDTO).collect(Collectors.toList());
+        return ordersService
+                .findAll()
+                .stream()
+                .map(this::convertToOrderDTO)
+                .collect(Collectors.toList());
     }
 
-
-    // add one order
-    @PostMapping("/add")
+    @PostMapping("/createOrder")
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid OrderDTO orderDTO,
                                              BindingResult bindingResult) {
-
         if(bindingResult.hasErrors()) {
             throw new OrderNotCreatedException(ErrorMessage.errorMessage(bindingResult));
         }
-
 
         ordersService.add(convertToOrders(orderDTO));
         return ResponseEntity.ok(HttpStatus.OK);
@@ -71,7 +72,6 @@ public class OrdersController {
                                                  @RequestBody
                                                  @Valid
                                                  List<OrderDetailsDTO> orderDetailsDTO) {
-
         Optional<Order> order = ordersService.findById(id);
 
         if(order.isPresent()) {
@@ -86,16 +86,16 @@ public class OrdersController {
                 order.get().getOrderDetails().add(convertToOrderDetails(od));
 
             });
-            List<OrderDetails> orderDetails = orderDetailsDTO.stream().map(this::convertToOrderDetails).collect(Collectors.toList());
-            System.out.println(orderDetails);
+            List<OrderDetails> orderDetails = orderDetailsDTO
+                    .stream()
+                    .map(this::convertToOrderDetails)
+                    .collect(Collectors.toList());
 
             ordersDetailsService.add(orderDetails);
-
             return ResponseEntity.ok(HttpStatus.OK);
         }
 
-        // exception. not response entity
-        return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+        throw new OrderNotFoundException("Order not found.");
     }
 
     @GetMapping("/{id}/sendOrder")
@@ -113,7 +113,6 @@ public class OrdersController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-
     private BoxDTO convertToBoxDTO(Box box) {
         return modelMapper.map(box, BoxDTO.class);
     }
@@ -125,6 +124,6 @@ public class OrdersController {
     }
 
     private OrderDTO convertToOrderDTO(Order order) {
-    return modelMapper.map(order, OrderDTO.class);
-}
+        return modelMapper.map(order, OrderDTO.class);
+    }
 }

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import com.cinquecento.project.BoxCompany.dto.OrderDetailsDTO;
 import com.cinquecento.project.BoxCompany.models.OrderDetails;
@@ -28,18 +27,21 @@ public class OrderDetailsController {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public OrderDetailsController(OrdersDetailsService ordersDetailsService, ModelMapper modelMapper) {
+    public OrderDetailsController(OrdersDetailsService ordersDetailsService,
+                                  ModelMapper modelMapper) {
         this.ordersDetailsService = ordersDetailsService;
         this.modelMapper = modelMapper;
     }
 
-    // get all order details
     @GetMapping
     public List<OrderDetailsDTO> getOrderDetails() {
-        return ordersDetailsService.findAll().stream().map(this::convertToOrderDetailsDTO).collect(Collectors.toList());
+        return ordersDetailsService
+                .findAll()
+                .stream()
+                .map(this::convertToOrderDetailsDTO)
+                .collect(Collectors.toList());
     }
 
-    // add order details
     @PostMapping("/create")
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid List<OrderDetailsDTO> orderDetailsDTO,
                                              BindingResult bindingResult) {
@@ -48,7 +50,11 @@ public class OrderDetailsController {
             throw new OrderDetailsNotCreatedException(ErrorMessage.errorMessage(bindingResult));
         }
 
-        ordersDetailsService.add(orderDetailsDTO.stream().map(this::convertToOrderDetails).collect(Collectors.toList()));
+        ordersDetailsService
+                .add(orderDetailsDTO
+                        .stream()
+                        .map(this::convertToOrderDetails)
+                        .collect(Collectors.toList()));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -67,7 +73,6 @@ public class OrderDetailsController {
 
         return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
     }
-
 
     @ExceptionHandler
     public ResponseEntity<OrderDetailsErrorsResponse> handlerException(OrderDetailsNotCreatedException e) {

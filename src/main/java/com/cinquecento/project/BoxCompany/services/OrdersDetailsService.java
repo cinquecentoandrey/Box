@@ -49,7 +49,6 @@ public class OrdersDetailsService {
 
     }
 
-
     @Transactional
     public void add(List<OrderDetails> orderDetails) {
         orderDetailsRepository.saveAll(orderDetails);

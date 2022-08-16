@@ -43,7 +43,6 @@ public class OrdersService {
         return ordersRepository.findByCustomer(customer);
     }
 
-    // use get() without present because guarantee to find the order
     @Transactional
     public void orderReceipt(int id) {
         Order order = ordersRepository.findById(id).get();

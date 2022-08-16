@@ -30,20 +30,24 @@ public class BoxesController {
     private final BoxValidator boxValidator;
 
     @Autowired
-    public BoxesController(BoxesService boxesService, ModelMapper modelMapper, BoxValidator boxValidator) {
+    public BoxesController(BoxesService boxesService,
+                           ModelMapper modelMapper,
+                           BoxValidator boxValidator) {
         this.boxesService = boxesService;
         this.modelMapper = modelMapper;
         this.boxValidator = boxValidator;
     }
 
-    // get all boxes
     @GetMapping()
     public List<BoxDTO> getBoxes() {
-        return boxesService.findAll().stream().map(this::convertToBoxDTO).collect(Collectors.toList());
+        return boxesService
+                .findAll()
+                .stream()
+                .map(this::convertToBoxDTO)
+                .collect(Collectors.toList());
     }
 
-    // add one box
-    @PostMapping("/add")
+    @PostMapping("/createBox")
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid BoxDTO boxDTO,
                                              BindingResult bindingResult) {
 
@@ -56,24 +60,25 @@ public class BoxesController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    // get all boxes on orders
     @GetMapping("/{id}/onOrders")
     public List<OrderDetailsDTO> onOrder(@PathVariable("id") int id) {
         Optional<Box> box = boxesService.findById(id);
         if(box.isPresent()) {
             List<OrderDetails> orderDetails = box.get().getOrderDetails();
-            System.out.println(orderDetails.toString());
             if (!orderDetails.isEmpty()) {
-                return orderDetails.stream().map(this::convertToOrderDetailsDTO).collect(Collectors.toList());
+                return orderDetails
+                        .stream()
+                        .map(this::convertToOrderDetailsDTO)
+                        .collect(Collectors.toList());
             }
         }
-        return Collections.singletonList((OrderDetailsDTO) Collections.emptyList());
+        return Collections.emptyList();
     }
 
-    // update box, but with not handler
     @PostMapping("/{id}/update")
     public ResponseEntity<HttpStatus> updateBox(@PathVariable("id") int id,
-                          @RequestBody @Valid BoxDTO boxDTO, BindingResult bindingResult) {
+                                                @RequestBody @Valid BoxDTO boxDTO,
+                                                BindingResult bindingResult) {
         boxValidator.validate(convertToBox(boxDTO), bindingResult);
         if (bindingResult.hasErrors()) {
             throw new BoxNotUpdatedException(ErrorMessage.errorMessage(bindingResult));
@@ -83,8 +88,14 @@ public class BoxesController {
     }
 
     @GetMapping("/{id}/updateOnOrderStatus")
-    public ResponseEntity<HttpStatus> updateOnOrderStatus(@PathVariable("id") int id) {
-        boxesService.updateOnOrderStatus(id);
+    public ResponseEntity<HttpStatus> updateOnOrderStatusById(@PathVariable("id") int id) {
+        boxesService.updateOnOrderStatusById(id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/updateOnOrderStatus")
+    public ResponseEntity<HttpStatus> updateOnOrderStatus() {
+        boxesService.updateOnOrderStatus();
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -96,7 +107,6 @@ public class BoxesController {
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
-
 
     private OrderDetailsDTO convertToOrderDetailsDTO(OrderDetails orderDetails) {
         return modelMapper.map(orderDetails, OrderDetailsDTO.class);

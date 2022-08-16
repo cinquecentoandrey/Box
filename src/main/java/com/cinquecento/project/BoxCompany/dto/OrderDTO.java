@@ -27,7 +27,7 @@ public class OrderDTO {
     @Size(min = 0, max = 16, message = "Country name should be between 0 and 16 symbols.")
     private String shipCountry;
 
-    private Boolean status;
+    private Boolean status = false;
 
     private CustomerDTO customer;
 
