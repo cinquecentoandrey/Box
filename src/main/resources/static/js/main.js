@@ -25,8 +25,8 @@ function sendRequest(method, url, body = null) {
     })
 }
 
-
 const path = window.location.pathname.split("/").pop();
+
 if(path === 'boxes.html') {
     sendRequest('GET', urlBoxGet)
         .then(data => showData(data))
@@ -36,7 +36,6 @@ if(path === 'boxes.html') {
         .then(data => showData(data))
         .catch(err => console.log(err))
 }
-
 
 const showData = json => {
     let element = json.map(element => {

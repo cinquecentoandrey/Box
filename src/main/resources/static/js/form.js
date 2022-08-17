@@ -16,29 +16,7 @@ formElement.addEventListener('submit', (e) => {
   sendRequset('POST', urlPost, body);
 });
 
-function sendRequset(method, url, body = null) {
-    return new Promise ((resolve, reject) => {
-        const xhr = new XMLHttpRequest()
 
-        xhr.open(method, url);
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.responseType = 'json';
-        
-        xhr.onload = () => {
-            if(xhr.status >= 400) {
-               reject(xhr.response)
-            } else {
-                resolve(xhr.response)
-            }
-        }
-        
-        xhr.onerror = () => {
-            reject(xhr.response)
-        }
-    
-        xhr.send(JSON.stringify(body))
-    })
-}
 
 
 
