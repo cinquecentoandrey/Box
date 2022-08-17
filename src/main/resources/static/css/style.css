@@ -1,0 +1,44 @@
+.button {
+  color: #222629;
+  font-size: 18px;
+  text-decoration: none;
+  border-radius: 5px;
+  background-color: #86c232;
+  background-size: auto;
+  padding: 0.375rem 0.75rem;
+  border: none;
+}
+.button:hover {
+  transition-duration: 1s;
+  color: #222629;
+  background-color: #61892f;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #222629;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #61892f;
+  color: white;
+  transition-duration: 0.375s;
+}
+
+.active {
+  background-color: #86c232;
+}
