@@ -45,13 +45,17 @@ public class BoxesService {
         boxesRepository.save(updatedBox);
     }
 
-    // in the future it will be possible to immediately call get() one at a time
     @Transactional
     public void updateOnOrderStatusById(int id) {
         Optional<Box> box = boxesRepository.findById(id);
         if(box.isPresent()) {
             box.get().setBoxId(id);
-            box.get().setBoxOnOrder(box.get().getOrderDetails().stream().mapToInt(OrderDetails::getQuantity).sum());
+            box.get().setBoxOnOrder(box
+                                    .get()
+                                    .getOrderDetails()
+                                    .stream()
+                                    .mapToInt(OrderDetails::getQuantity)
+                                    .sum());
             boxesRepository.save(box.get());
         }
     }
@@ -63,7 +67,7 @@ public class BoxesService {
         });
     }
 
-    // danger!
+
     @Transactional
     public void delete(Box box) {
         boxesRepository.delete(box);

@@ -67,7 +67,7 @@ public class OrdersService {
         order.setDeliveryDate(LocalDateTime.now());
         ordersRepository.save(order);
     }
-    // danger!
+
     @Transactional
     public void delete(Order order) {
         ordersRepository.save(order);

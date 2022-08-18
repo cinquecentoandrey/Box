@@ -46,7 +46,6 @@ public class CustomersService {
         else {
             return Collections.emptyList();
         }
-
     }
 
     @Transactional
@@ -60,11 +59,9 @@ public class CustomersService {
         customersRepository.save(customer);
     }
 
-    // danger!
     @Transactional
     public void delete(Customer customer) {
         customersRepository.delete(customer);
     }
-
 
 }
