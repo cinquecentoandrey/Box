@@ -1,4 +1,4 @@
-package com.cinquecento.project.BoxCompany.util;
+package com.cinquecento.project.BoxCompany.util.responces;
 
 import java.time.LocalDateTime;
 

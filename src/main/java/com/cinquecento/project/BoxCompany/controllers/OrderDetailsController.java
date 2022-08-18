@@ -2,8 +2,8 @@ package com.cinquecento.project.BoxCompany.controllers;
 
 
 import com.cinquecento.project.BoxCompany.util.ErrorMessage;
-import com.cinquecento.project.BoxCompany.util.OrderDetailsErrorsResponse;
-import com.cinquecento.project.BoxCompany.util.OrderDetailsNotCreatedException;
+import com.cinquecento.project.BoxCompany.util.responces.OrderDetailsErrorsResponse;
+import com.cinquecento.project.BoxCompany.util.exceptions.OrderDetailsNotCreatedException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

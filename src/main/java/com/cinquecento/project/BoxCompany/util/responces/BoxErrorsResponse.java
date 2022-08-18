@@ -1,12 +1,13 @@
-package com.cinquecento.project.BoxCompany.util;
+package com.cinquecento.project.BoxCompany.util.responces;
 
 import java.time.LocalDateTime;
 
-public class OrderErrorsResponse {
+public class BoxErrorsResponse {
+
     private String name;
     private LocalDateTime timeStamp;
 
-    public OrderErrorsResponse(String name, LocalDateTime timeStamp) {
+    public BoxErrorsResponse(String name, LocalDateTime timeStamp) {
         this.name = name;
         this.timeStamp = timeStamp;
     }
