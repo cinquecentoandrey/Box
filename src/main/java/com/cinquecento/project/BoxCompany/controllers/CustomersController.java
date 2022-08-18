@@ -1,6 +1,7 @@
 package com.cinquecento.project.BoxCompany.controllers;
 
 
+
 import com.cinquecento.project.BoxCompany.services.CustomersService;
 import com.cinquecento.project.BoxCompany.services.OrdersService;
 import com.cinquecento.project.BoxCompany.util.*;
@@ -76,15 +77,14 @@ public class CustomersController {
         throw new CustomerNotFoundException("Not found.");
     }
 
-    // return order + order details List<OrderDTO<List<OrderDetailsDTO>>
     @GetMapping("/{id}/getOrders")
     public List<OrderDTO> getOrders(@PathVariable("id") int id) {
+
         Optional<Customer> customer = customersService.findById(id);
         if (customer.isPresent()) {
             List<Order> orders = customer.get().getOrder();
             if(!orders.isEmpty()) {
-                return customersService
-                        .findOrdersByCustomerId(id)
+                return orders
                         .stream()
                         .map(this::convertToOrderDTO).collect(Collectors.toList());
             }
