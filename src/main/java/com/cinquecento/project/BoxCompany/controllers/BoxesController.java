@@ -30,9 +30,7 @@ public class BoxesController {
     private final BoxValidator boxValidator;
 
     @Autowired
-    public BoxesController(BoxesService boxesService,
-                           ModelMapper modelMapper,
-                           BoxValidator boxValidator) {
+    public BoxesController(BoxesService boxesService, ModelMapper modelMapper, BoxValidator boxValidator) {
         this.boxesService = boxesService;
         this.modelMapper = modelMapper;
         this.boxValidator = boxValidator;

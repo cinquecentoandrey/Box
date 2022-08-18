@@ -37,10 +37,7 @@ public class OrdersController {
     private final OrdersDetailsService ordersDetailsService;
 
     @Autowired
-    public OrdersController(OrdersService ordersService,
-                            ModelMapper modelMapper,
-                            BoxesService boxesService,
-                            OrdersDetailsService ordersDetailsService) {
+    public OrdersController(OrdersService ordersService, ModelMapper modelMapper, BoxesService boxesService, OrdersDetailsService ordersDetailsService) {
         this.ordersService = ordersService;
         this.modelMapper = modelMapper;
         this.boxesService = boxesService;
@@ -72,6 +69,7 @@ public class OrdersController {
                                                  @RequestBody
                                                  @Valid
                                                  List<OrderDetailsDTO> orderDetailsDTO) {
+
         Optional<Order> order = ordersService.findById(id);
 
         if(order.isPresent()) {
@@ -82,14 +80,17 @@ public class OrdersController {
                 box.getOrderDetails().add(convertToOrderDetails(od));
 
                 od.setBoxPrice(box.getBoxPrice());
-                od.setOrder(convertToOrderDTO(order.get()));
-                order.get().getOrderDetails().add(convertToOrderDetails(od));
+                od.setTotal(box.getBoxPrice() * od.getQuantity() * (1-od.getDiscount()));
 
             });
             List<OrderDetails> orderDetails = orderDetailsDTO
                     .stream()
                     .map(this::convertToOrderDetails)
                     .collect(Collectors.toList());
+
+           orderDetails.forEach(od -> {
+                   od.setOrder(order.get());
+            });
 
             ordersDetailsService.add(orderDetails);
             return ResponseEntity.ok(HttpStatus.OK);

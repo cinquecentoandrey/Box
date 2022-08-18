@@ -27,8 +27,7 @@ public class OrderDetailsController {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public OrderDetailsController(OrdersDetailsService ordersDetailsService,
-                                  ModelMapper modelMapper) {
+    public OrderDetailsController(OrdersDetailsService ordersDetailsService, ModelMapper modelMapper) {
         this.ordersDetailsService = ordersDetailsService;
         this.modelMapper = modelMapper;
     }
@@ -50,22 +49,19 @@ public class OrderDetailsController {
             throw new OrderDetailsNotCreatedException(ErrorMessage.errorMessage(bindingResult));
         }
 
-        ordersDetailsService
-                .add(orderDetailsDTO
-                        .stream()
-                        .map(this::convertToOrderDetails)
-                        .collect(Collectors.toList()));
+        ordersDetailsService.add(orderDetailsDTO
+                                    .stream()
+                                    .map(this::convertToOrderDetails)
+                                    .collect(Collectors.toList()));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    // set order details by box and order id
-    // needs to be reworked
     @PostMapping("/{id}/setOrderDetails")
     public ResponseEntity<HttpStatus> setOrder(@RequestParam("box_id") int box_id,
                                                @RequestParam("order_id") int order_id,
                                                @PathVariable("id") int id) {
         Optional<OrderDetails> orderDetails = ordersDetailsService.findById(id);
-        System.out.println(orderDetails.isPresent());
+
         if(orderDetails.isPresent()) {
             ordersDetailsService.setCredentials(orderDetails.get(), box_id, order_id);
             return ResponseEntity.ok(HttpStatus.OK);

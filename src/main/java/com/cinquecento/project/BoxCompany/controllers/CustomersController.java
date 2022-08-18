@@ -33,10 +33,7 @@ public class CustomersController {
     private final OrdersService ordersService;
 
     @Autowired
-    public CustomersController(CustomersService customersService,
-                               ModelMapper modelMapper,
-                               CustomerValidator customerValidator,
-                               OrdersService ordersService) {
+    public CustomersController(CustomersService customersService, ModelMapper modelMapper, CustomerValidator customerValidator, OrdersService ordersService) {
         this.customersService = customersService;
         this.modelMapper = modelMapper;
         this.customerValidator = customerValidator;
@@ -79,6 +76,7 @@ public class CustomersController {
         throw new CustomerNotFoundException("Not found.");
     }
 
+    // return order + order details List<OrderDTO<List<OrderDetailsDTO>>
     @GetMapping("/{id}/getOrders")
     public List<OrderDTO> getOrders(@PathVariable("id") int id) {
         Optional<Customer> customer = customersService.findById(id);
