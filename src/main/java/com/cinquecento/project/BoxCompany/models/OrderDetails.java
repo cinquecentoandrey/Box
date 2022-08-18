@@ -106,8 +106,9 @@ public class OrderDetails {
                 ", boxPrice=" + boxPrice +
                 ", quantity=" + quantity +
                 ", discount=" + discount +
-                /*", order=" + order.getOrderId() +
-                ", box=" + box.getBoxId()*/ +
+                ", total=" + total +
+                ", order=" + order +
+                ", box=" + box +
                 '}';
     }
 }

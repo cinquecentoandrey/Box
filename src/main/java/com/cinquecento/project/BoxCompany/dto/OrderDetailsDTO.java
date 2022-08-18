@@ -15,6 +15,7 @@ public class OrderDetailsDTO {
     @NotNull(message = "Discount should not be null.")
     private Double discount;
 
+    private Double total;
     private OrderDTO order;
     private BoxDTO box;
 
@@ -48,6 +49,14 @@ public class OrderDetailsDTO {
 
     public void setDiscount(Double discount) {
         this.discount = discount;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
     public OrderDTO getOrder() {

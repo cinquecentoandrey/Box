@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 
 public class CustomerDTO {
 
+    private int customerId;
     @NotEmpty(message = "Field should not be empty.")
     @Size(min = 0, max = 40, message = "Name should be between 0 and 40 symbols.")
     private String companyName;
@@ -42,6 +43,14 @@ public class CustomerDTO {
     @NotEmpty(message = "Field should not be empty.")
     @Size(min = 0, max = 30, message = "Phone number should be between 0 and 20 symbols.")
     private String phone;
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
 
     public String getCompanyName() {
         return companyName;

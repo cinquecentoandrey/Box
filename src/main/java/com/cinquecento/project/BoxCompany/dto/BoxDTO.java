@@ -1,9 +1,15 @@
 package com.cinquecento.project.BoxCompany.dto;
 
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 public class BoxDTO {
+
+    private int boxId;
     @NotNull(message = "Box name should not be null.")
     private String boxName;
 
@@ -22,6 +28,14 @@ public class BoxDTO {
     private Integer boxInStock;
 
     private Integer boxOnOrder;
+
+    public int getBoxId() {
+        return boxId;
+    }
+
+    public void setBoxId(int boxId) {
+        this.boxId = boxId;
+    }
 
     public String getBoxName() {
         return boxName;
