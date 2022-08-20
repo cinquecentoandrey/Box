@@ -9,9 +9,13 @@ import com.cinquecento.project.BoxCompany.models.OrderDetails;
 import com.cinquecento.project.BoxCompany.services.BoxesService;
 import com.cinquecento.project.BoxCompany.services.OrdersDetailsService;
 import com.cinquecento.project.BoxCompany.util.ErrorMessage;
+import com.cinquecento.project.BoxCompany.util.exceptions.BoxCountNotEnoughException;
+import com.cinquecento.project.BoxCompany.util.exceptions.BoxNotFoundException;
 import com.cinquecento.project.BoxCompany.util.exceptions.OrderNotFoundException;
+import com.cinquecento.project.BoxCompany.util.responces.BoxErrorsResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -25,6 +29,7 @@ import com.cinquecento.project.BoxCompany.util.exceptions.OrderNotCreatedExcepti
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,13 +40,15 @@ public class OrdersController {
     private final ModelMapper modelMapper;
     private final BoxesService boxesService;
     private final OrdersDetailsService ordersDetailsService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public OrdersController(OrdersService ordersService, ModelMapper modelMapper, BoxesService boxesService, OrdersDetailsService ordersDetailsService) {
+    public OrdersController(OrdersService ordersService, ModelMapper modelMapper, BoxesService boxesService, OrdersDetailsService ordersDetailsService, MessageSource messageSource) {
         this.ordersService = ordersService;
         this.modelMapper = modelMapper;
         this.boxesService = boxesService;
         this.ordersDetailsService = ordersDetailsService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping()
@@ -75,12 +82,14 @@ public class OrdersController {
         if(order.isPresent()) {
            orderDetailsDTO.forEach(od -> {
 
-                Box box = boxesService.findById(od.getBoxId()).get();
-                od.setBox(convertToBoxDTO(box));
-                box.getOrderDetails().add(convertToOrderDetails(od));
+                Optional<Box> box = boxesService.findById(od.getBoxId());
+                if(box.isPresent()) {
+                    od.setBox(convertToBoxDTO(box.get()));
+                    od.setBoxPrice(box.get().getBoxPrice());
+                    od.setTotal(box.get().getBoxPrice() * od.getQuantity() * (1 - od.getDiscount()));
+                }
 
-                od.setBoxPrice(box.getBoxPrice());
-                od.setTotal(box.getBoxPrice() * od.getQuantity() * (1-od.getDiscount()));
+                throw new BoxNotFoundException(messageSource.getMessage("box.notFoundMessage", null, Locale.ENGLISH));
 
             });
             List<OrderDetails> orderDetails = orderDetailsDTO
@@ -96,18 +105,60 @@ public class OrdersController {
             return ResponseEntity.ok(HttpStatus.OK);
         }
 
-        throw new OrderNotFoundException("Order not found.");
+        throw new OrderNotFoundException(messageSource.getMessage("order.notFoundMessage", null, Locale.ENGLISH));
     }
 
     @GetMapping("/{id}/sendOrder")
     public ResponseEntity<HttpStatus> send(@PathVariable("id") int id) {
-        ordersService.orderReceipt(id);
-        return ResponseEntity.ok(HttpStatus.OK);
+        Optional<Order> order = ordersService.findById(id);
+        if(order.isPresent()) {
+            List<OrderDetails> orderDetails = order.get().getOrderDetails();
+            orderDetails.forEach(o -> {
+                if(o.getBox().getBoxInStock() < o.getBox().getBoxOnOrder()) {
+                    throw new BoxCountNotEnoughException(messageSource.getMessage("box.countNotEnoughMessage", null, Locale.ENGLISH)
+                            + "\nBox in stock: " + o.getBox().getBoxInStock()
+                            + "\nBox on order: " + o.getBox().getBoxOnOrder());
+                }
+            });
+
+            ordersService.orderReceipt(id);
+            return ResponseEntity.ok(HttpStatus.OK);
+        }
+
+        throw new OrderNotFoundException(messageSource.getMessage("order.notFoundMessage", null, Locale.ENGLISH));
+
     }
 
     @ExceptionHandler
     private ResponseEntity<OrderErrorsResponse> handlerException(OrderNotCreatedException e) {
         OrderErrorsResponse response = new OrderErrorsResponse(
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<OrderErrorsResponse> handlerException(OrderNotFoundException e) {
+        OrderErrorsResponse response = new OrderErrorsResponse(
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<BoxErrorsResponse> handlerException(BoxCountNotEnoughException e) {
+        BoxErrorsResponse response = new BoxErrorsResponse(
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<BoxErrorsResponse> handlerException(BoxNotFoundException e) {
+        BoxErrorsResponse response = new BoxErrorsResponse(
                 e.getMessage(),
                 LocalDateTime.now()
         );
