@@ -11,6 +11,7 @@ import com.cinquecento.project.BoxCompany.util.responces.CustomerErrorsResponse;
 import com.cinquecento.project.BoxCompany.util.validators.CustomerValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,13 +38,15 @@ public class CustomersController {
     private final ModelMapper modelMapper;
     private final CustomerValidator customerValidator;
     private final OrdersService ordersService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public CustomersController(CustomersService customersService, ModelMapper modelMapper, CustomerValidator customerValidator, OrdersService ordersService) {
+    public CustomersController(CustomersService customersService, ModelMapper modelMapper, CustomerValidator customerValidator, OrdersService ordersService, MessageSource messageSource) {
         this.customersService = customersService;
         this.modelMapper = modelMapper;
         this.customerValidator = customerValidator;
         this.ordersService = ordersService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping()
@@ -78,13 +82,13 @@ public class CustomersController {
             return ResponseEntity.ok(HttpStatus.OK);
         }
 
-        throw new CustomerNotFoundException("Not found.");
+        throw new CustomerNotFoundException(messageSource.getMessage("customer.notFoundMessage", null, Locale.ENGLISH));
     }
 
     @GetMapping("/{id}/getOrders")
     public List<OrderDTO> getOrders(@PathVariable("id") int id) {
-
         Optional<Customer> customer = customersService.findById(id);
+
         if (customer.isPresent()) {
             List<Order> orders = customer.get().getOrder();
             if(!orders.isEmpty()) {
@@ -93,24 +97,29 @@ public class CustomersController {
                         .map(this::convertToOrderDTO).collect(Collectors.toList());
             }
         }
+
         return Collections.emptyList();
     }
 
     @ExceptionHandler
     private ResponseEntity<CustomerErrorsResponse> handlerException(CustomerNotCreatedException e) {
+
         CustomerErrorsResponse response = new CustomerErrorsResponse(
                 e.getMessage(),
                 LocalDateTime.now()
         );
+
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     private ResponseEntity<CustomerErrorsResponse> handlerException(CustomerNotFoundException e) {
+
         CustomerErrorsResponse response = new CustomerErrorsResponse(
                 e.getMessage(),
                 LocalDateTime.now()
         );
+
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
