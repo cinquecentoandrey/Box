@@ -1,22 +1,23 @@
-package com.cinquecento.project.BoxCompany.controllers;
+package com.cinquecento.project.Box.controllers;
 
 
-import com.cinquecento.project.BoxCompany.util.*;
-import com.cinquecento.project.BoxCompany.util.exceptions.BoxNotCreatedException;
-import com.cinquecento.project.BoxCompany.util.exceptions.BoxNotUpdatedException;
-import com.cinquecento.project.BoxCompany.util.responces.BoxErrorsResponse;
-import com.cinquecento.project.BoxCompany.util.validators.BoxValidator;
+import com.cinquecento.project.Box.util.*;
+import com.cinquecento.project.Box.util.exceptions.BoxNotCreatedException;
+import com.cinquecento.project.Box.util.exceptions.BoxNotUpdatedException;
+import com.cinquecento.project.Box.util.responces.BoxErrorsResponse;
+import com.cinquecento.project.Box.util.validators.BoxValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import com.cinquecento.project.BoxCompany.dto.BoxDTO;
-import com.cinquecento.project.BoxCompany.dto.OrderDetailsDTO;
-import com.cinquecento.project.BoxCompany.models.Box;
-import com.cinquecento.project.BoxCompany.models.OrderDetails;
-import com.cinquecento.project.BoxCompany.services.BoxesService;
+import com.cinquecento.project.Box.dto.BoxDTO;
+import com.cinquecento.project.Box.dto.OrderDetailsDTO;
+import com.cinquecento.project.Box.models.Box;
+import com.cinquecento.project.Box.models.OrderDetails;
+import com.cinquecento.project.Box.services.BoxesService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@Slf4j
 @RequestMapping("/boxes")
 public class BoxesController {
 
@@ -102,11 +104,24 @@ public class BoxesController {
     }
 
     @ExceptionHandler
+    private ResponseEntity<BoxErrorsResponse> handlerException(BoxNotCreatedException e) {
+        BoxErrorsResponse response = new BoxErrorsResponse(
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+
+        log.error(response.getName());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
     private ResponseEntity<BoxErrorsResponse> handlerException(BoxNotUpdatedException e) {
         BoxErrorsResponse response = new BoxErrorsResponse(
                 e.getMessage(),
                 LocalDateTime.now()
         );
+
+        log.error(response.getName());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

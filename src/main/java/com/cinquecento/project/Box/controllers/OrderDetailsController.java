@@ -1,18 +1,19 @@
-package com.cinquecento.project.BoxCompany.controllers;
+package com.cinquecento.project.Box.controllers;
 
 
-import com.cinquecento.project.BoxCompany.util.ErrorMessage;
-import com.cinquecento.project.BoxCompany.util.responces.OrderDetailsErrorsResponse;
-import com.cinquecento.project.BoxCompany.util.exceptions.OrderDetailsNotCreatedException;
+import com.cinquecento.project.Box.util.ErrorMessage;
+import com.cinquecento.project.Box.util.responces.OrderDetailsErrorsResponse;
+import com.cinquecento.project.Box.util.exceptions.OrderDetailsNotCreatedException;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import com.cinquecento.project.BoxCompany.dto.OrderDetailsDTO;
-import com.cinquecento.project.BoxCompany.models.OrderDetails;
-import com.cinquecento.project.BoxCompany.services.OrdersDetailsService;
+import com.cinquecento.project.Box.dto.OrderDetailsDTO;
+import com.cinquecento.project.Box.models.OrderDetails;
+import com.cinquecento.project.Box.services.OrdersDetailsService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@Slf4j
 @RequestMapping("/orderDetails")
 public class OrderDetailsController {
     private final OrdersDetailsService ordersDetailsService;
@@ -77,6 +79,7 @@ public class OrderDetailsController {
                 LocalDateTime.now()
         );
 
+        log.error(response.getName());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

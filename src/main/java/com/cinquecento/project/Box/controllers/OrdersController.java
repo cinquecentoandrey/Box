@@ -1,18 +1,19 @@
-package com.cinquecento.project.BoxCompany.controllers;
+package com.cinquecento.project.Box.controllers;
 
 
 
-import com.cinquecento.project.BoxCompany.dto.BoxDTO;
-import com.cinquecento.project.BoxCompany.dto.OrderDetailsDTO;
-import com.cinquecento.project.BoxCompany.models.Box;
-import com.cinquecento.project.BoxCompany.models.OrderDetails;
-import com.cinquecento.project.BoxCompany.services.BoxesService;
-import com.cinquecento.project.BoxCompany.services.OrdersDetailsService;
-import com.cinquecento.project.BoxCompany.util.ErrorMessage;
-import com.cinquecento.project.BoxCompany.util.exceptions.BoxCountNotEnoughException;
-import com.cinquecento.project.BoxCompany.util.exceptions.BoxNotFoundException;
-import com.cinquecento.project.BoxCompany.util.exceptions.OrderNotFoundException;
-import com.cinquecento.project.BoxCompany.util.responces.BoxErrorsResponse;
+import com.cinquecento.project.Box.dto.BoxDTO;
+import com.cinquecento.project.Box.dto.OrderDetailsDTO;
+import com.cinquecento.project.Box.models.Box;
+import com.cinquecento.project.Box.models.OrderDetails;
+import com.cinquecento.project.Box.services.BoxesService;
+import com.cinquecento.project.Box.services.OrdersDetailsService;
+import com.cinquecento.project.Box.util.ErrorMessage;
+import com.cinquecento.project.Box.util.exceptions.BoxCountNotEnoughException;
+import com.cinquecento.project.Box.util.exceptions.BoxNotFoundException;
+import com.cinquecento.project.Box.util.exceptions.OrderNotFoundException;
+import com.cinquecento.project.Box.util.responces.BoxErrorsResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -20,11 +21,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import com.cinquecento.project.BoxCompany.dto.OrderDTO;
-import com.cinquecento.project.BoxCompany.models.Order;
-import com.cinquecento.project.BoxCompany.services.OrdersService;
-import com.cinquecento.project.BoxCompany.util.responces.OrderErrorsResponse;
-import com.cinquecento.project.BoxCompany.util.exceptions.OrderNotCreatedException;
+import com.cinquecento.project.Box.dto.OrderDTO;
+import com.cinquecento.project.Box.models.Order;
+import com.cinquecento.project.Box.services.OrdersService;
+import com.cinquecento.project.Box.util.responces.OrderErrorsResponse;
+import com.cinquecento.project.Box.util.exceptions.OrderNotCreatedException;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -34,6 +35,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@Slf4j
 @RequestMapping("/orders")
 public class OrdersController {
     private final OrdersService ordersService;
@@ -135,6 +137,8 @@ public class OrdersController {
                 e.getMessage(),
                 LocalDateTime.now()
         );
+
+        log.error(response.getName());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -144,6 +148,8 @@ public class OrdersController {
                 e.getMessage(),
                 LocalDateTime.now()
         );
+
+        log.error(response.getName());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -153,6 +159,8 @@ public class OrdersController {
                 e.getMessage(),
                 LocalDateTime.now()
         );
+
+        log.error(response.getName());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -162,6 +170,8 @@ public class OrdersController {
                 e.getMessage(),
                 LocalDateTime.now()
         );
+
+        log.error(response.getName());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

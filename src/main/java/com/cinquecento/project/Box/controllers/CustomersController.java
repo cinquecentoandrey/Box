@@ -1,14 +1,15 @@
-package com.cinquecento.project.BoxCompany.controllers;
+package com.cinquecento.project.Box.controllers;
 
 
 
-import com.cinquecento.project.BoxCompany.services.CustomersService;
-import com.cinquecento.project.BoxCompany.services.OrdersService;
-import com.cinquecento.project.BoxCompany.util.*;
-import com.cinquecento.project.BoxCompany.util.exceptions.CustomerNotCreatedException;
-import com.cinquecento.project.BoxCompany.util.exceptions.CustomerNotFoundException;
-import com.cinquecento.project.BoxCompany.util.responces.CustomerErrorsResponse;
-import com.cinquecento.project.BoxCompany.util.validators.CustomerValidator;
+import com.cinquecento.project.Box.services.CustomersService;
+import com.cinquecento.project.Box.services.OrdersService;
+import com.cinquecento.project.Box.util.*;
+import com.cinquecento.project.Box.util.exceptions.CustomerNotCreatedException;
+import com.cinquecento.project.Box.util.exceptions.CustomerNotFoundException;
+import com.cinquecento.project.Box.util.responces.CustomerErrorsResponse;
+import com.cinquecento.project.Box.util.validators.CustomerValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -16,10 +17,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import com.cinquecento.project.BoxCompany.dto.CustomerDTO;
-import com.cinquecento.project.BoxCompany.dto.OrderDTO;
-import com.cinquecento.project.BoxCompany.models.Customer;
-import com.cinquecento.project.BoxCompany.models.Order;
+import com.cinquecento.project.Box.dto.CustomerDTO;
+import com.cinquecento.project.Box.dto.OrderDTO;
+import com.cinquecento.project.Box.models.Customer;
+import com.cinquecento.project.Box.models.Order;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@Slf4j
 @RequestMapping("/customers")
 public class CustomersController {
 
@@ -103,12 +105,12 @@ public class CustomersController {
 
     @ExceptionHandler
     private ResponseEntity<CustomerErrorsResponse> handlerException(CustomerNotCreatedException e) {
-
         CustomerErrorsResponse response = new CustomerErrorsResponse(
                 e.getMessage(),
                 LocalDateTime.now()
         );
 
+        log.error(response.getName());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -120,6 +122,7 @@ public class CustomersController {
                 LocalDateTime.now()
         );
 
+        log.error(response.getName());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
