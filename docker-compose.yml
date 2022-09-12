@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  postgres:
+    image: 'postgres:10'
+    container_name: 'java-postgres'
+    environment:
+      - 'POSTGRES_USER:postgres'
+      - 'POSTGRES_PASSWORD=root'
+      - 'POSTGRES_DB=box'
+  app:
+    build: ./
+    container_name: 'box-app'
+    ports:
+      - 8090:8080
