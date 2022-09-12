@@ -1,2 +1,2 @@
 # Box
-REST API based on Spring
+REST API based on Spring Framework
