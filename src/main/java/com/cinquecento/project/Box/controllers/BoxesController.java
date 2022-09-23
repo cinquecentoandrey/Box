@@ -65,7 +65,7 @@ public class BoxesController {
     }
 
     @GetMapping("/{id}/onOrders")
-    public List<OrderDetailsDTO> onOrder(@PathVariable("id") int id) {
+    public List<OrderDetailsDTO> onOrderById(@PathVariable("id") int id) {
         Optional<Box> box = boxesService.findById(id);
         if(box.isPresent()) {
             List<OrderDetails> orderDetails = box.get().getOrderDetails();
@@ -77,6 +77,15 @@ public class BoxesController {
             }
         }
         return Collections.emptyList();
+    }
+
+    @GetMapping("/onOrders")
+    public List<BoxDTO> onOrder() {
+        return boxesService.findAll()
+                .stream()
+                .filter(box -> box.getBoxOnOrder() > 0)
+                .map(this::convertToBoxDTO)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/{id}/update")
