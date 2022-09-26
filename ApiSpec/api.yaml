@@ -1,0 +1,421 @@
+openapi: 3.0.0
+info:
+  title: Box control system
+  contact:
+    email: chehonte16@gmail.com
+  version: 0.0.1
+servers:
+  - url: https://localhost:8080
+
+paths:
+  /boxes:
+    get:
+      summary: Get all boxes
+      tags: 
+        - Boxes
+      responses:
+        '200': 
+          description: "Successful answer with a list of boxes."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Boxes"
+                
+  /boxes/createBox:
+    post:
+      summary: Create box
+      tags: 
+        - Boxes
+      requestBody:
+        required: True
+        content:
+          application/json:
+              schema:
+                $ref: "#/components/schemas/Box"
+      responses:
+        '200':
+          description: "Ok."
+        'default':
+          description: "All nonstandard."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+            
+  /boxes/{box_id}/onOrders:
+    get:
+      summary: Get orders by box
+      tags:
+        - Boxes
+      parameters:
+          - name: box_id
+            in: path
+            required: true
+            description: Box id
+            schema:
+              type: string
+      responses:
+          '200': 
+            description: "Successful answer with a list of boxes."
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Boxes"
+      
+  /boxes/onOrders:
+    get:
+      summary: Get all the boxes that were ordered
+      tags:
+        - Boxes
+      responses:
+          '200': 
+            description: "Successful answer with a list of boxes."
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Boxes"
+                  
+  /boxes/{box_id}/update:
+    post:
+      summary: Update box fields
+      tags:
+          - Boxes
+      parameters:
+            - name: box_id
+              in: path
+              required: true
+              description: Box id
+              schema:
+                type: string
+      responses:
+            '200': 
+              description: "Successful answer with a list of boxes."
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Boxes"
+            'default':
+              description: "All nonstandard."
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Error"
+                    
+  /boxes/updateOnOrderStatus:
+    get:
+      summary: Update on order status
+      tags: 
+        - Boxes
+      responses:
+          '200': 
+            description: "Successful answer with a list of boxes."
+            content:
+              application/json:
+                schema:
+                  type: string
+                  example: 'Ok'
+                  
+  /customers:
+    get:
+      summary: Get all customers
+      tags: 
+        - Customers
+      responses:
+        '200': 
+          description: "Successful answer with a list of customers."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customers"
+                
+  /customers/createCustomer:
+    post:
+      summary: Create customer
+      tags: 
+        - Customers
+      requestBody:
+        required: True
+        content:
+          application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+      responses:
+        '200':
+          description: "Ok."
+        'default':
+          description: "All nonstandard."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+                
+  /customer/{customer_id}/createOrder:
+    post:
+      summary: Create order by customer id
+      tags:
+        - Customers
+      requestBody:
+        required: True
+        content:
+          application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+      parameters:
+            - name: customer_id
+              in: path
+              required: true
+              description: Customer id
+              schema:
+                type: string
+      responses:
+            '200': 
+              description: "Ok."
+            'default':
+              description: "All nonstandard."
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Error"
+                    
+  /customer/{customer_id}/getOrders:
+    get:
+      summary: Get all orders by id
+      tags: 
+        - Customers
+      parameters:
+            - name: customer_id
+              in: path
+              required: true
+              description: Customer id
+              schema:
+                type: string
+      responses:
+        '200': 
+          description: "Successful answer with a list of orders."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Orders"
+        'default':
+          description: "Unsucessful answer."
+          content:
+            application/json:
+              schema:
+                type: array
+                items: "[]"
+  
+  /orders:
+    get:
+      summary: Get all orders
+      tags: 
+        - Orders
+      responses:
+        '200': 
+          description: "Successful answer with a list of orders."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Orders"
+                
+  /orders/createOrder:
+    post:
+        summary: Create order
+        tags: 
+          - Orders
+        requestBody:
+          required: True
+          content:
+            application/json:
+                schema:
+                  $ref: "#/components/schemas/Order"
+        responses:
+          '200':
+            description: "Ok."
+          'default':
+            description: "All nonstandard."
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+                  
+  /orders/{order_id}/sendOrder:
+    get:
+      summary: Send order by id
+      tags:
+        - Orders
+      parameters:
+          - name: order_id
+            in: path
+            required: true
+            description: Order id
+            schema:
+              type: string
+      responses:
+          '200': 
+            description: "Ok"
+          'default':
+            description: "All nonstandard."
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+  
+  /orders/{order_id}/addDetails:
+    post:
+      summary: Add order details by id
+      tags: 
+        - Orders
+      parameters:
+          - name: order_id
+            in: path
+            required: true
+            description: Order id
+            schema:
+              type: string
+      responses:
+          '200': 
+            description: "Successful answer."
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/OrderDetails"
+          'default':
+            description: "All nonstandard."
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+                  
+components:
+  schemas:
+    Box:
+      type: object
+      properties:
+        boxId:
+          type: integer
+          format: int64
+          example: 1
+        boxName:
+          type: string
+          example: "Box1"
+        boxLength:
+          type: integer
+          format: int32
+          example: 300
+        boxWidth:
+          type: integer
+          format: int32
+          example: 250
+        boxHeight:
+          type: integer
+          format: int32
+          example: 220
+        boxPrice:
+          type: number
+          example: 33.2
+        boxInStock:
+          type: integer
+          format: int64
+          example: 4400
+        boxOnOrder:
+          type: integer
+          format: int64
+          example: 12000
+    Boxes:
+      type: array
+      items: 
+        $ref: "#/components/schemas/Box"
+    Customer:
+      properties:
+        customerId:
+          type: integer
+          format: int64
+          example: 14
+        companyName:
+          type: string
+          example: "Company name"
+        contactName:
+          type: string
+          example: "Fname Sname"
+        contactTitle:
+          type: string
+          example: "Owner"
+        address:
+          type: string
+          example: "World Blvd 13"
+        city:
+          type: string
+          example: "London"
+        postalCode:
+          type: string
+          example: "666777"
+        email:
+          type: string
+          example: "email@gmail.com"
+        country:
+          type: string
+          example: "Singapur"
+        phone:
+          type: string
+          example: "89519091345"
+    Customers:
+      type: array
+      items: 
+        $ref: "#/components/schemas/Customer"
+    Order:
+      properties:
+        orderId:
+          type: integer
+          format: int64
+          example: 14
+        shipAddress:
+          type: string
+          example: "World Blvd 13"
+        shipCity:
+          type: string
+          example: "London"
+        shipPostalCode:
+          type: string
+          example: "666777"
+        shipCountry:
+          type: string
+          example: "666777"
+        status:
+          type: boolean
+          example: "true"
+    Orders:
+      type: array
+      items: 
+        $ref: "#/components/schemas/Order"
+    OrderDetails:
+      properties:
+        orderDetailsId:
+          type: integer
+          format: int64
+          example: 55
+        boxPrice:
+          type: number
+          example: 23.5
+        quantity:
+          type: integer
+          format: int64
+          example: 5500
+        discount:
+          type: number
+          example: 0.2
+        total:
+          type: number
+          example: 101000.55
+    OrderDetailsList:
+      type: array
+      items: 
+        $ref: "#/components/schemas/OrderDetails"
+    Error:
+      type: object
+      properties:
+        message: 
+          type: string
+          example: "Error message."
+        timestamp:
+          type: string
+          example: "yyyy-MM-dd-HH-mm-ss.zzz"
