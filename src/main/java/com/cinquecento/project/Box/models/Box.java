@@ -14,23 +14,23 @@ public class Box {
     private int boxId;
 
     @Column(name = "box_name")
-    @NotNull
+    @NotNull(message = "Field should not be empty.")
     private String boxName;
 
     @Column(name = "box_length")
-    @NotNull
+    @NotNull(message = "Field should not be empty.")
     private Integer boxLength;
 
     @Column(name = "box_width")
-    @NotNull
+    @NotNull(message = "Field should not be empty.")
     private Integer boxWidth;
 
     @Column(name = "box_height")
-    @NotNull
+    @NotNull(message = "Field should not be empty.")
     private Integer boxHeight;
 
     @Column(name = "box_price")
-    @NotNull
+    @NotNull(message = "Field should not be empty.")
     private Double boxPrice;
 
     @Column(name = "box_in_stock")
