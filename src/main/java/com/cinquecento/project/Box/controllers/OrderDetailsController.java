@@ -34,7 +34,7 @@ public class OrderDetailsController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping
+    @GetMapping()
     public List<OrderDetailsDTO> getOrderDetails() {
         return ordersDetailsService
                 .findAll()
